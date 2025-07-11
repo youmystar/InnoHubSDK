@@ -7,7 +7,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'InnoHubSDK'
-  s.version          = '1.0.0'
+  s.version          = '1.0.1'
   s.summary          = 'InnoHubSDK提供核心功能接口，支持高效集成'
 
 # This description is used to generate tags and improve search results.
@@ -28,14 +28,8 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
   s.swift_versions        = ['5.0', '5.1', '5.2', '5.3', '5.4', '6.0']
   # s.source_files = ['InnoHubSDK/Classes/*.{swift,xib,h,m,framework}']
-  
-  s.resource_bundles = {
-    'InnoHubSDK' => ['InnoHubSDK/Assets/iconfont.ttf', 'InnoHubSDK/Assets/imageSDK.bundle']
-  }
 
-  #s.public_header_files = 'Pod/Classes/*.h'
-  #s.vendored_libraries = 'PodspecLib/Classes/FCBle/*.a'
-  #s.libraries = ['iconv', 'iconv.2']
+  s.resource_bundles = {'InnoHubSDK' => ['InnoHubSDK/Assets/*.{ttf,png,lproj}']}
   s.vendored_frameworks = ['InnoHubSDK/Classes/*.xcframework']
   s.frameworks = ['CoreBluetooth', 'Photos', 'AVFoundation', 'UIKit', 'Security', 'SystemConfiguration', 'CryptoKit', 'NetworkExtension']
   s.dependency 'Alamofire', '5.9.1'
