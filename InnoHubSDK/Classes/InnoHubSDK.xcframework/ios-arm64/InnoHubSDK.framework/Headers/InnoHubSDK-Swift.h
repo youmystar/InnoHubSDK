@@ -281,6 +281,8 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #if __has_warning("-Watimport-in-framework-header")
 #pragma clang diagnostic ignored "-Watimport-in-framework-header"
 #endif
+@import AVFoundation;
+@import Foundation;
 @import ObjectiveC;
 #endif
 
@@ -304,11 +306,171 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 #if defined(__OBJC__)
 
+/// The <code>ESPDevice</code> class is the main inteface for managing a device. It encapsulates method and properties
+/// required to provision, connect and communicate with the device.
+SWIFT_CLASS("_TtC10InnoHubSDK9ESPDevice")
+@interface ESPDevice : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+@class AVCaptureMetadataOutput;
+@class AVMetadataObject;
+@class AVCaptureConnection;
+/// The <code>ESPProvisionManager</code> class is a singleton class. It provides methods for getting <code>ESPDevice</code> object.
+/// Provide option to
+SWIFT_CLASS("_TtC10InnoHubSDK19ESPProvisionManager")
+@interface ESPProvisionManager : NSObject <AVCaptureMetadataOutputObjectsDelegate>
+/// Member to access singleton object of class.
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) ESPProvisionManager * _Nonnull shared;)
++ (ESPProvisionManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+/// Stops searching for Bluetooth devices. Not applicable for SoftAP device type.
+/// Any intermediate search result will be ignored. Delegate for peripheralsNotFound is called.
+- (void)stopESPDevicesSearch;
+/// Stop camera session that is capturing QR code. Call this method when your <code>Scan View</code> goes out of scope.
+- (void)stopScan;
+- (void)captureOutput:(AVCaptureMetadataOutput * _Nonnull)_ didOutputMetadataObjects:(NSArray<AVMetadataObject *> * _Nonnull)metadataObjects fromConnection:(AVCaptureConnection * _Nonnull)_;
+/// Method to enable/disable library logs.
+/// \param enable Bool to enable/disable console logs`.
+///
+- (void)enableLogs:(BOOL)enable;
+@end
+
+@class NSString;
 @class UIViewController;
 SWIFT_CLASS_NAMED("PublicAPI")
 @interface PublicAPI : NSObject
-- (void)pushViewControllerWithViewController:(UIViewController * _Nonnull)viewController;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+/// 配置全局参数
+/// @param projectId 社区id
+/// @param spaceId 家庭id
+/// @param token token
+- (void)configureGlobalSettingsWithProjectId:(NSString * _Nonnull)projectId spaceId:(NSString * _Nonnull)spaceId token:(NSString * _Nonnull)token;
+- (void)pushViewControllerWithDeviceId:(NSString * _Nonnull)deviceId thirdRealId:(NSString * _Nonnull)thirdRealId productId:(NSString * _Nonnull)productId name:(NSString * _Nonnull)name pictureUrlApp:(NSString * _Nonnull)pictureUrlApp model:(NSString * _Nonnull)model detailUrl:(NSString * _Nonnull)detailUrl lang:(NSString * _Nonnull)lang roomName:(NSString * _Nonnull)roomName from:(UIViewController * _Nonnull)viewController;
+/// *获取设备列表
+- (void)getDeviceListWithCompletion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// *获取设备列表
+- (void)getProductTypeListWithCompletion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 获取品类下设备
+- (void)getProductTypeDevieWithType:(NSString * _Nonnull)type completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 获取设备引导数据
+/// @param model 物模型
+- (void)getDeviceGuideWithModel:(NSString * _Nonnull)model completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 扫码登录
+/// @param productId 产品id
+/// @param data 扫码结果
+- (void)loginScanWithProductId:(NSString * _Nonnull)productId data:(NSString * _Nonnull)data completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 获取子设备可用网关
+/// @param productId 产品id
+- (void)getAvailableDeviceWithProductId:(NSString * _Nonnull)productId completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 获取子设备支持网关
+/// @param productId 产品id
+- (void)getSupportDeviceWithProductId:(NSString * _Nonnull)productId completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 开启zigbee设备组网
+/// @param productId 产品id
+/// @param thirdRealId pass deviceId
+- (void)startZigbeeJoinWithProductId:(NSString * _Nonnull)productId thirdRealId:(NSString * _Nonnull)thirdRealId completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 停止zigbee设备组网
+/// @param productId 产品id
+/// @param thirdRealId pass deviceId
+- (void)stopZigbeeJoinWithProductId:(NSString * _Nonnull)productId thirdRealId:(NSString * _Nonnull)thirdRealId completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 开启plc开启组网
+/// @param productId 产品id
+/// @param thirdRealId pass deviceId
+- (void)startPlcJoinWithProductId:(NSString * _Nonnull)productId thirdRealId:(NSString * _Nonnull)thirdRealId completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 停止plc设备组网
+/// @param productId 产品id
+/// @param thirdRealId pass deviceId
+- (void)stopPlcJoinWithProductId:(NSString * _Nonnull)productId thirdRealId:(NSString * _Nonnull)thirdRealId completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 检查设备联网
+/// @param productId 产品id
+/// @param model 物模型
+- (void)pollingCheckDeviceWithModel:(NSString * _Nonnull)model completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 同步小米设备
+- (void)synchronizingXiaomiDevicesWithCompletion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 创建小米空间
+- (void)createMiSpaceWithCompletion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 获取wifi热点名称
+/// @param model 物模型
+- (void)fetchCurrentWiFiSSIDWithModel:(NSString * _Nonnull)model completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 获取获取accessToken
+/// @param model 物模型
+- (void)getAccessTokenWithProductId:(NSString * _Nonnull)productId completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 配置睡眠检测仪
+/// @param ssid wifi 名称
+/// @param passWord wifi 密码
+- (void)fetchIgnoreCertificateSleepWithSsid:(NSString * _Nonnull)ssid passWord:(NSString * _Nonnull)passWord completion:(void (^ _Nonnull)(BOOL, NSString * _Nullable))completion;
+/// 路由器查查看OEM信息
+- (void)fetchRouterCheckOemInformationWithCompletion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 获取random
+- (void)getRandomNumberInterfaceWithCompletion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 获取random
+/// @param random 随机数
+/// *@param passWord 密码
+- (void)routerLoginWithRandom:(NSString * _Nonnull)random passWord:(NSString * _Nonnull)passWord completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 扫描局域网的设备
+/// @param localHost 域名
+- (void)scanNeighborsDeviceWithLocalHost:(NSString * _Nonnull)localHost completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nullable))completion;
+/// list all drives 获取名称和地址
+/// @param localHost 域名
+/// @param deviceId 设备id
+- (void)getNasBindDeviceNameAndAddressWithLocalHost:(NSString * _Nonnull)localHost deviceId:(NSString * _Nonnull)deviceId completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nullable))completion;
+/// 初始化时配置设备登录密码及无线密码
+/// @param httpPass 地址
+/// @param ssid 名称
+/// @param passWord 密码
+- (void)configureWirelessPasswordWithHttpPass:(NSString * _Nonnull)httpPass ssid:(NSString * _Nonnull)ssid passWord:(NSString * _Nonnull)passWord completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 绑定青松沃德门锁 智居门锁K1
+/// @param productId 产品id
+/// @param macAddress mac地址
+- (void)bindingDoorLockWithProductId:(NSString * _Nonnull)productId macAddress:(NSString * _Nonnull)macAddress completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 为家庭生成nas虚拟账号
+- (void)createNASVirtualAccountWithCompletion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nullable))completion;
+/// 为家庭生成nas虚拟账号
+/// @param localHost 域名
+/// @param uuid userUUID
+/// @param name 设备名称
+/// @param path 路径
+- (void)bindingNasWithLocalHost:(NSString * _Nonnull)localHost uuid:(NSString * _Nonnull)uuid name:(NSString * _Nonnull)name path:(NSString * _Nonnull)path completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nullable))completion;
+/// 检查Nas设备状态
+/// @param localHost 域名
+/// @param deviceId 设备id
+- (void)checkNasStatusWithLocalHost:(NSString * _Nonnull)localHost deviceId:(NSString * _Nonnull)deviceId completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nullable))completion;
+/// 检查Nas设备列表
+/// @param localHost 域名
+- (void)getNasDeviceListWithLocalHost:(NSString * _Nonnull)localHost completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nullable))completion;
+/// 扫码绑定
+/// @param code 扫码结果
+/// @param model 物模型
+- (void)scanCodeDeviceBindWithCode:(NSString * _Nonnull)code model:(NSString * _Nonnull)model completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 扫码登录
+/// @param code 扫码结果
+- (void)scanLoginWithCode:(NSString * _Nonnull)code completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 根据sn号查询设备信息
+/// @param snNo sn号
+- (void)getDeviceInfoBySNWithSnNo:(NSString * _Nonnull)snNo completion:(void (^ _Nonnull)(BOOL, NSDictionary<NSString *, id> * _Nullable))completion;
+/// 扫码绑定
+/// @param productId 产品id
+/// @param data 扫码结果
+/// @param model 物模型
+- (void)bindingLoginScanWithProductId:(NSString * _Nonnull)productId data:(NSString * _Nonnull)data model:(NSString * _Nonnull)model completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nonnull))completion;
+/// 贝氪设备绑定
+/// @param productId 产品id
+/// @param data 扫码结果
+/// @param model 物模型
+- (void)bindingBekryptonDeviceWithProductId:(NSString * _Nonnull)productId data:(NSString * _Nonnull)data model:(NSString * _Nonnull)model completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nonnull))completion;
+/// 绑定Zigbee设备
+/// @param productId 产品id
+/// @param thirdRealId pass deviceId
+/// @param model 物模型
+- (void)bindingZigbeeJoinDeviceWithProductId:(NSString * _Nonnull)productId thirdRealId:(NSString * _Nonnull)thirdRealId model:(NSString * _Nonnull)model completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nonnull))completion;
+/// 绑定PLC设备
+/// @param productId 产品id
+/// @param thirdRealId pass deviceId
+/// @param model 物模型
+- (void)bindingPlcJoinDeviceWithProductId:(NSString * _Nonnull)productId thirdRealId:(NSString * _Nonnull)thirdRealId model:(NSString * _Nonnull)model completion:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nonnull))completion;
 @end
 
 #endif
