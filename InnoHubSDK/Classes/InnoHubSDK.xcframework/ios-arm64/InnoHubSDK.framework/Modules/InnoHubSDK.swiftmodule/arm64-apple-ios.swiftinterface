@@ -1,0 +1,705 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.1.2 effective-5.10 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name InnoHubSDK
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -interface-compiler-version 6.1.2
+import AVFoundation
+import Alamofire
+import SystemConfiguration.CaptiveNetwork
+import CommonCrypto
+import CoreBluetooth
+import CryptoKit
+import Foundation
+import Network
+import NetworkExtension
+import ObjectiveC
+import Photos
+import Security
+import Swift
+import SwiftProtobuf
+import SwiftyJSON
+import SystemConfiguration
+import UIKit
+import WebKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public enum Group {
+  case N1024
+  case N2048
+  case N1536
+  case N3072
+  case N4096
+  case N6144
+  case N8192
+  public struct CustomGroup {
+  }
+  case custom(InnoHubSDK.Group.CustomGroup)
+  public init?(prime: Swift.String, generator: Swift.String)
+}
+public protocol ESPError : Swift.Error {
+  var description: Swift.String { get }
+  var code: Swift.Int { get }
+}
+public enum ESPWiFiScanError : InnoHubSDK.ESPError {
+  case emptyConfigData
+  case emptyResultCount
+  case scanRequestError(any Swift.Error)
+  public var description: Swift.String {
+    get
+  }
+  public var code: Swift.Int {
+    get
+  }
+}
+public enum ESPThreadScanError : InnoHubSDK.ESPError {
+  case emptyConfigData
+  case emptyResultCount
+  case scanRequestError(any Swift.Error)
+  public var description: Swift.String {
+    get
+  }
+  public var code: Swift.Int {
+    get
+  }
+}
+public enum ESPSessionError : InnoHubSDK.ESPError {
+  case sessionInitError
+  case sessionNotEstablished
+  case sendDataError(any Swift.Error)
+  case softAPConnectionFailure
+  case securityMismatch
+  case versionInfoError(any Swift.Error)
+  case bleFailedToConnect
+  case encryptionError
+  case noPOP
+  case noUsername
+  public var description: Swift.String {
+    get
+  }
+  public var code: Swift.Int {
+    get
+  }
+}
+public enum ESPDeviceCSSError : InnoHubSDK.ESPError {
+  case cameraNotAvailable
+  case cameraAccessDenied
+  case avCaptureDeviceInputError
+  case videoInputError
+  case videoOutputError
+  case invalidQRCode(Swift.String)
+  case espDeviceNotFound
+  case softApSearchNotSupported
+  public var description: Swift.String {
+    get
+  }
+  public var code: Swift.Int {
+    get
+  }
+}
+public enum ESPProvisionError : InnoHubSDK.ESPError {
+  case sessionError
+  case configurationError(any Swift.Error)
+  case wifiStatusError(any Swift.Error)
+  case wifiStatusDisconnected
+  case wifiStatusAuthenticationError
+  case wifiStatusNetworkNotFound
+  case wifiStatusUnknownError
+  case threadStatusError(any Swift.Error)
+  case threadStatusDettached
+  case threadDatasetInvalid
+  case threadStatusNetworkNotFound
+  case threadStatusUnknownError
+  case unknownError
+  public var description: Swift.String {
+    get
+  }
+  public var code: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class ESPSession {
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class Client<H> where H : CryptoKit.HashFunction {
+  public var isAuthenticated: Swift.Bool {
+    get
+  }
+  convenience public init(username: Swift.String, password: Swift.String, group: InnoHubSDK.Group = .N3072, privateKey: Foundation.Data? = nil)
+  convenience public init(username: Swift.String, precomputedX: Foundation.Data, group: InnoHubSDK.Group = .N3072, privateKey: Foundation.Data? = nil)
+  public func startAuthentication() -> (username: Swift.String, publicKey: Foundation.Data)
+  public func processChallenge(salt: Foundation.Data, publicKey serverPublicKey: Foundation.Data) throws -> (clientVerify: Foundation.Data, sessionKey: CryptoKit.SymmetricKey)
+  public func verifySession(keyProof serverKeyProof: Foundation.Data) throws
+  public var publicKey: Foundation.Data {
+    get
+  }
+  public var privateKey: Foundation.Data {
+    get
+  }
+  public var sessionKey: Foundation.Data? {
+    get
+  }
+  @objc deinit
+}
+public enum WifiAuthMode : SwiftProtobuf.Enum {
+  public typealias RawValue = Swift.Int
+  case open
+  case wep
+  case wpaPsk
+  case wpa2Psk
+  case wpaWpa2Psk
+  case wpa2Enterprise
+  case wpa3Psk
+  case wpa2Wpa3Psk
+  case UNRECOGNIZED(Swift.Int)
+  public init()
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension InnoHubSDK.WifiAuthMode : Swift.CaseIterable {
+  public static let allCases: [InnoHubSDK.WifiAuthMode]
+  public typealias AllCases = [InnoHubSDK.WifiAuthMode]
+}
+extension InnoHubSDK.WifiAuthMode : @unchecked Swift.Sendable {
+}
+extension InnoHubSDK.WifiAuthMode : SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+}
+extension InnoHubSDK.BigUInt {
+  public static func + (a: InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt) -> InnoHubSDK.BigUInt
+  public static func += (a: inout InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt)
+}
+extension InnoHubSDK.BigUInt {
+  public init(_ buffer: Swift.UnsafeRawBufferPointer)
+  public init(_ data: Foundation.Data)
+  public func serialize() -> Foundation.Data
+}
+@_hasMissingDesignatedInitializers public class ESPProvision {
+  public static let CONFIG_TRANSPORT_KEY: Swift.String
+  public static let CONFIG_SECURITY_KEY: Swift.String
+  public static let CONFIG_PROOF_OF_POSSESSION_KEY: Swift.String
+  public static let CONFIG_BASE_URL_KEY: Swift.String
+  public static let CONFIG_WIFI_AP_KEY: Swift.String
+  public static let CONFIG_TRANSPORT_WIFI: Swift.String
+  public static let CONFIG_TRANSPORT_BLE: Swift.String
+  public static let CONFIG_SECURITY_SECURITY0: Swift.String
+  public static let CONFIG_SECURITY_SECURITY1: Swift.String
+  @objc deinit
+}
+extension Foundation.Data {
+  public init(hex: Swift.String)
+  public var bytes: [Swift.UInt8] {
+    get
+  }
+  public func toHexString() -> Swift.String
+  public func sha256() -> Foundation.Data
+  public var hexadecimalString: Swift.String {
+    get
+  }
+}
+extension Swift.Array {
+  public init(reserveCapacity: Swift.Int)
+}
+extension Swift.Array where Element == Swift.UInt8 {
+  public init(hex: Swift.String)
+  public func toHexString() -> Swift.String
+}
+extension Swift.String {
+  public var bytes: [Swift.UInt8] {
+    get
+  }
+}
+extension InnoHubSDK.BigUInt {
+  public func power(_ exponent: Swift.Int) -> InnoHubSDK.BigUInt
+  public func power(_ exponent: InnoHubSDK.BigUInt, modulus: InnoHubSDK.BigUInt) -> InnoHubSDK.BigUInt
+}
+@_hasMissingDesignatedInitializers public class ESPThreadManager {
+  @objc deinit
+}
+extension InnoHubSDK.BigUInt : Swift.Comparable {
+  public static func compare(_ a: InnoHubSDK.BigUInt, _ b: InnoHubSDK.BigUInt) -> Foundation.ComparisonResult
+  public static func == (a: InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt) -> Swift.Bool
+  public static func < (a: InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt) -> Swift.Bool
+}
+public protocol ESPCodeable {
+  func getNextRequestInSession(data: Foundation.Data?) throws -> Foundation.Data?
+  func encrypt(data: Foundation.Data) -> Foundation.Data?
+  func decrypt(data: Foundation.Data) -> Foundation.Data?
+}
+public struct ESPThreadNetwork {
+  public var panID: Swift.UInt32
+  public var channel: Swift.UInt32
+  public var rssi: Swift.Int32
+  public var lqi: Swift.UInt32
+  public var extAddr: Foundation.Data
+  public var networkName: Swift.String
+  public var extPanID: Foundation.Data
+}
+extension InnoHubSDK.BigUInt {
+  public mutating func multiply(byWord y: InnoHubSDK.BigUInt.Word)
+  public func multiplied(byWord y: InnoHubSDK.BigUInt.Word) -> InnoHubSDK.BigUInt
+  public mutating func multiplyAndAdd(_ x: InnoHubSDK.BigUInt, _ y: InnoHubSDK.BigUInt.Word, shiftedBy shift: Swift.Int = 0)
+  public func multiplied(by y: InnoHubSDK.BigUInt) -> InnoHubSDK.BigUInt
+  public static var directMultiplicationLimit: Swift.Int
+  public static func * (x: InnoHubSDK.BigUInt, y: InnoHubSDK.BigUInt) -> InnoHubSDK.BigUInt
+  public static func *= (a: inout InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt)
+}
+extension InnoHubSDK.BigUInt {
+  public init?<T>(exactly source: T) where T : Swift.BinaryFloatingPoint
+  public init<T>(_ source: T) where T : Swift.BinaryFloatingPoint
+}
+public enum AuthenticationFailure : Swift.Error {
+  case invalidPublicKey
+  case missingChallenge
+  case keyProofMismatch
+  public static func == (a: InnoHubSDK.AuthenticationFailure, b: InnoHubSDK.AuthenticationFailure) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension InnoHubSDK.AuthenticationFailure : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public class ESPSoftAPTransport {
+  public init(baseUrl: Swift.String)
+  public func SendConfigData(path: Swift.String, data: Foundation.Data, completionHandler: @escaping (Foundation.Data?, (any Swift.Error)?) -> Swift.Void)
+  @objc deinit
+}
+extension InnoHubSDK.BigUInt {
+  public init?<S>(_ text: S, radix: Swift.Int = 10) where S : Swift.StringProtocol
+}
+extension Swift.String {
+  public init(_ v: InnoHubSDK.BigUInt)
+  public init(_ v: InnoHubSDK.BigUInt, radix: Swift.Int, uppercase: Swift.Bool = false)
+}
+extension InnoHubSDK.BigUInt : Swift.ExpressibleByStringLiteral {
+  public init(unicodeScalarLiteral value: Swift.UnicodeScalar)
+  public init(extendedGraphemeClusterLiteral value: Swift.String)
+  public init(stringLiteral value: Swift.StringLiteralType)
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.String
+  public typealias StringLiteralType = Swift.StringLiteralType
+  public typealias UnicodeScalarLiteralType = Swift.UnicodeScalar
+}
+extension InnoHubSDK.BigUInt : Swift.CustomPlaygroundDisplayConvertible {
+  public var playgroundDescription: Any {
+    get
+  }
+}
+extension InnoHubSDK.BigUInt : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public func createSaltedVerificationKey<H>(using hashFunction: H.Type, group: InnoHubSDK.Group = .N2048, username: Swift.String, password: Swift.String, salt: Foundation.Data? = nil) -> (salt: Foundation.Data, verificationKey: Foundation.Data) where H : CryptoKit.HashFunction
+public func createSaltedVerificationKey(from x: Foundation.Data, salt: Foundation.Data? = nil, group: InnoHubSDK.Group = .N2048) -> (salt: Foundation.Data, verificationKey: Foundation.Data)
+extension InnoHubSDK.BigUInt {
+  public mutating func subtractReportingOverflow(_ b: InnoHubSDK.BigUInt, shiftedBy shift: Swift.Int = 0) -> Swift.Bool
+  public func subtractingReportingOverflow(_ other: InnoHubSDK.BigUInt, shiftedBy shift: Swift.Int) -> (partialValue: InnoHubSDK.BigUInt, overflow: Swift.Bool)
+  public func subtractingReportingOverflow(_ other: InnoHubSDK.BigUInt) -> (partialValue: InnoHubSDK.BigUInt, overflow: Swift.Bool)
+  public mutating func subtract(_ other: InnoHubSDK.BigUInt, shiftedBy shift: Swift.Int = 0)
+  public func subtracting(_ other: InnoHubSDK.BigUInt, shiftedBy shift: Swift.Int = 0) -> InnoHubSDK.BigUInt
+  public mutating func decrement(shiftedBy shift: Swift.Int = 0)
+  public static func - (a: InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt) -> InnoHubSDK.BigUInt
+  public static func -= (a: inout InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt)
+}
+extension InnoHubSDK.BigUInt {
+  public subscript(bitAt index: Swift.Int) -> Swift.Bool {
+    get
+    set
+  }
+}
+extension InnoHubSDK.BigUInt {
+  public var bitWidth: Swift.Int {
+    get
+  }
+  public var leadingZeroBitCount: Swift.Int {
+    get
+  }
+  public var trailingZeroBitCount: Swift.Int {
+    get
+  }
+}
+extension InnoHubSDK.BigUInt {
+  public struct Words : Swift.RandomAccessCollection {
+    public var startIndex: Swift.Int {
+      get
+    }
+    public var endIndex: Swift.Int {
+      get
+    }
+    public subscript(index: Swift.Int) -> InnoHubSDK.BigUInt.Word {
+      get
+    }
+    public typealias Element = InnoHubSDK.BigUInt.Word
+    public typealias Index = Swift.Int
+    public typealias Indices = Swift.Range<Swift.Int>
+    public typealias Iterator = Swift.IndexingIterator<InnoHubSDK.BigUInt.Words>
+    public typealias SubSequence = Swift.Slice<InnoHubSDK.BigUInt.Words>
+  }
+  public var words: InnoHubSDK.BigUInt.Words {
+    get
+  }
+  public init<Words>(words: Words) where Words : Swift.Sequence, Words.Element == Swift.UInt
+}
+public enum ESPNetworkType : Swift.String {
+  case wifi
+  case thread
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum ESPTransport : Swift.String {
+  case ble
+  case softap
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum ESPSecurity : Swift.Int {
+  case unsecure
+  case secure
+  case secure2
+  public init(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class ESPProvisionManager : ObjectiveC.NSObject, AVFoundation.AVCaptureMetadataOutputObjectsDelegate {
+  @objc public static let shared: InnoHubSDK.ESPProvisionManager
+  public func searchESPDevices(devicePrefix: Swift.String, transport: InnoHubSDK.ESPTransport, security: InnoHubSDK.ESPSecurity = .secure, completionHandler: @escaping ([InnoHubSDK.ESPDevice]?, InnoHubSDK.ESPDeviceCSSError?) -> Swift.Void)
+  @objc public func stopESPDevicesSearch()
+  public func scanQRCode(scanView: UIKit.UIView, completionHandler: @escaping (InnoHubSDK.ESPDevice?, InnoHubSDK.ESPDeviceCSSError?) -> Swift.Void, scanStatus: ((InnoHubSDK.ESPScanStatus) -> ())? = nil)
+  @objc public func stopScan()
+  public func refreshDeviceList(completionHandler: @escaping ([InnoHubSDK.ESPDevice]?, InnoHubSDK.ESPDeviceCSSError?) -> Swift.Void)
+  @objc public func metadataOutput(_: AVFoundation.AVCaptureMetadataOutput, didOutput metadataObjects: [AVFoundation.AVMetadataObject], from _: AVFoundation.AVCaptureConnection)
+  public func createESPDevice(deviceName: Swift.String, transport: InnoHubSDK.ESPTransport, security: InnoHubSDK.ESPSecurity = .secure2, proofOfPossession: Swift.String? = nil, softAPPassword: Swift.String? = nil, username: Swift.String? = nil, network: InnoHubSDK.ESPNetworkType? = nil, completionHandler: @escaping (InnoHubSDK.ESPDevice?, InnoHubSDK.ESPDeviceCSSError?) -> Swift.Void)
+  @objc public func enableLogs(_ enable: Swift.Bool)
+  @objc deinit
+}
+public struct BigUInt : Swift.UnsignedInteger {
+  public typealias Word = Swift.UInt
+  public init()
+  public init(words: [InnoHubSDK.BigUInt.Word])
+  public typealias Magnitude = InnoHubSDK.BigUInt
+  public typealias Stride = Swift.Int
+}
+extension InnoHubSDK.BigUInt {
+  public static var isSigned: Swift.Bool {
+    get
+  }
+  public var isZero: Swift.Bool {
+    get
+  }
+  public func signum() -> InnoHubSDK.BigUInt
+}
+extension InnoHubSDK.BigUInt {
+  public static func >>= <Other>(lhs: inout InnoHubSDK.BigUInt, rhs: Other) where Other : Swift.BinaryInteger
+  public static func <<= <Other>(lhs: inout InnoHubSDK.BigUInt, rhs: Other) where Other : Swift.BinaryInteger
+  public static func >> <Other>(lhs: InnoHubSDK.BigUInt, rhs: Other) -> InnoHubSDK.BigUInt where Other : Swift.BinaryInteger
+  public static func << <Other>(lhs: InnoHubSDK.BigUInt, rhs: Other) -> InnoHubSDK.BigUInt where Other : Swift.BinaryInteger
+}
+extension InnoHubSDK.BigUInt {
+  prefix public static func ~ (a: InnoHubSDK.BigUInt) -> InnoHubSDK.BigUInt
+  public static func |= (a: inout InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt)
+  public static func &= (a: inout InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt)
+  public static func ^= (a: inout InnoHubSDK.BigUInt, b: InnoHubSDK.BigUInt)
+}
+public struct ESPWifiNetwork {
+  public var ssid: Swift.String
+  public var channel: Swift.UInt32
+  public var rssi: Swift.Int32
+  public var bssid: Foundation.Data
+  public var auth: InnoHubSDK.WifiAuthMode
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+}
+extension InnoHubSDK.BigUInt {
+  public func quotientAndRemainder(dividingBy y: InnoHubSDK.BigUInt) -> (quotient: InnoHubSDK.BigUInt, remainder: InnoHubSDK.BigUInt)
+  public static func / (x: InnoHubSDK.BigUInt, y: InnoHubSDK.BigUInt) -> InnoHubSDK.BigUInt
+  public static func % (x: InnoHubSDK.BigUInt, y: InnoHubSDK.BigUInt) -> InnoHubSDK.BigUInt
+  public static func /= (x: inout InnoHubSDK.BigUInt, y: InnoHubSDK.BigUInt)
+  public static func %= (x: inout InnoHubSDK.BigUInt, y: InnoHubSDK.BigUInt)
+}
+public enum ESPScanStatus {
+  case scanStarted
+  case readingCode
+  case searchingBLE(Swift.String)
+  case joiningSoftAP(Swift.String)
+}
+public enum ESPSessionStatus {
+  case connected
+  case failedToConnect(InnoHubSDK.ESPSessionError)
+  case disconnected
+}
+public enum ESPProvisionStatus {
+  case success
+  case failure(InnoHubSDK.ESPProvisionError)
+  case configApplied
+}
+public protocol ESPBLEDelegate {
+  func peripheralConnected()
+  func peripheralDisconnected(peripheral: CoreBluetooth.CBPeripheral, error: (any Swift.Error)?)
+  func peripheralFailedToConnect(peripheral: CoreBluetooth.CBPeripheral?, error: (any Swift.Error)?)
+}
+public protocol ESPDeviceConnectionDelegate {
+  func getProofOfPossesion(forDevice: InnoHubSDK.ESPDevice, completionHandler: @escaping (Swift.String) -> Swift.Void)
+  func getUsername(forDevice: InnoHubSDK.ESPDevice, completionHandler: @escaping (_ username: Swift.String?) -> Swift.Void)
+}
+@objc public class ESPDevice : ObjectiveC.NSObject {
+  public var espSoftApTransport: InnoHubSDK.ESPSoftAPTransport!
+  public var peripheral: CoreBluetooth.CBPeripheral!
+  public var capabilities: [Swift.String]?
+  public var security: InnoHubSDK.ESPSecurity
+  public var transport: InnoHubSDK.ESPTransport
+  public var delegate: (any InnoHubSDK.ESPDeviceConnectionDelegate)?
+  public var securityLayer: (any InnoHubSDK.ESPCodeable)!
+  public var versionInfo: Foundation.NSDictionary?
+  public var bleDelegate: (any InnoHubSDK.ESPBLEDelegate)?
+  public var username: Swift.String?
+  public var network: InnoHubSDK.ESPNetworkType?
+  public var advertisementData: [Swift.String : Any]? {
+    get
+  }
+  public var name: Swift.String {
+    get
+  }
+  public init(name: Swift.String, security: InnoHubSDK.ESPSecurity, transport: InnoHubSDK.ESPTransport, proofOfPossession: Swift.String? = nil, username: Swift.String? = nil, network: InnoHubSDK.ESPNetworkType? = nil, softAPPassword: Swift.String? = nil, advertisementData: [Swift.String : Any]? = nil)
+  open func connect(delegate: (any InnoHubSDK.ESPDeviceConnectionDelegate)? = nil, completionHandler: @escaping (InnoHubSDK.ESPSessionStatus) -> Swift.Void)
+  open func sendData(path: Swift.String, data: Foundation.Data, completionHandler: @escaping (Foundation.Data?, InnoHubSDK.ESPSessionError?) -> Swift.Void)
+  public func isSessionEstablished() -> Swift.Bool
+  public func provision(ssid: Swift.String?, passPhrase: Swift.String? = "", threadOperationalDataset: Foundation.Data? = nil, completionHandler: @escaping (InnoHubSDK.ESPProvisionStatus) -> Swift.Void)
+  public func wifiConnectedIp4Addr() -> Swift.String?
+  public func disconnect()
+  public func scanThreadList(completionHandler: @escaping ([InnoHubSDK.ESPThreadNetwork]?, InnoHubSDK.ESPThreadScanError?) -> Swift.Void)
+  public func scanWifiList(completionHandler: @escaping ([InnoHubSDK.ESPWifiNetwork]?, InnoHubSDK.ESPWiFiScanError?) -> Swift.Void)
+  open func initialiseSession(sessionPath: Swift.String?, completionHandler: @escaping (InnoHubSDK.ESPSessionStatus) -> Swift.Void)
+  @objc deinit
+}
+extension InnoHubSDK.BigUInt {
+  public init?<T>(exactly source: T) where T : Swift.BinaryInteger
+  public init<T>(_ source: T) where T : Swift.BinaryInteger
+  public init<T>(truncatingIfNeeded source: T) where T : Swift.BinaryInteger
+  public init<T>(clamping source: T) where T : Swift.BinaryInteger
+}
+extension InnoHubSDK.BigUInt : Swift.ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: Swift.UInt64)
+  public typealias IntegerLiteralType = Swift.UInt64
+}
+@_hasMissingDesignatedInitializers public class ESPWiFiManager {
+  @objc deinit
+}
+extension UIKit.UIDevice {
+  @_Concurrency.MainActor @preconcurrency public func isiPhoneXMore() -> Swift.Bool
+}
+@objc public protocol BluetoothManagerDelegate {
+  @objc optional func managerDidUpdateState(state: CoreBluetooth.CBManagerState)
+  @objc optional func managerScanState(scanning: Swift.Bool)
+  @objc optional func managerDidDiscoverPeripheral(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
+  @objc optional func managerDidDiscoverMorePeripheral(allPeripheral: [Foundation.UUID : InnoHubSDK.ZZPeripheral])
+  @objc optional func managerDidConnectPeripheral(peripheral: CoreBluetooth.CBPeripheral)
+  @objc optional func managerDidFailToConnectPeripheral(peripheral: CoreBluetooth.CBPeripheral, error: Foundation.NSError?)
+  @objc optional func managerDidDisconnectPeripheral(peripheral: CoreBluetooth.CBPeripheral, error: Foundation.NSError?)
+  @objc optional func peripheralDidDiscoverServices(services: [CoreBluetooth.CBService])
+  @objc optional func peripheralDidDiscoverCharacteristicsForService(peripheral: CoreBluetooth.CBPeripheral)
+  @objc optional func peripheralDidUpdateNotificationStateForCharacteristic(characteristic: CoreBluetooth.CBCharacteristic)
+  @objc optional func peripheralDidUpdateValueForCharacteristic(characteristic: CoreBluetooth.CBCharacteristic)
+  @objc optional func managerPeripheral(peripheral: CoreBluetooth.CBPeripheral, characteristic: CoreBluetooth.CBCharacteristic, error: Foundation.NSError?)
+}
+@_inheritsConvenienceInitializers @objc(BluetoothManager) public class BluetoothManager : ObjectiveC.NSObject, CoreBluetooth.CBCentralManagerDelegate, CoreBluetooth.CBPeripheralDelegate {
+  @objc public var centralManager: CoreBluetooth.CBCentralManager?
+  @objc public var allPeripherals: [Foundation.UUID : InnoHubSDK.ZZPeripheral]?
+  @objc public var curPeripheral: InnoHubSDK.ZZPeripheral?
+  @objc public var services: [CoreBluetooth.CBService]
+  @objc weak public var delegate: (any InnoHubSDK.BluetoothManagerDelegate)?
+  @objc public var readArray: [CoreBluetooth.CBCharacteristic]
+  @objc public var write: CoreBluetooth.CBCharacteristic?
+  @objc public var write1: CoreBluetooth.CBCharacteristic?
+  @objc public var eigenvalue: Swift.String
+  @objc public static var shared: InnoHubSDK.BluetoothManager?
+  @objc public static func resetAndCreateNewInstance() -> InnoHubSDK.BluetoothManager?
+  @objc public func reset()
+  @objc override dynamic public init()
+  @objc public func scanWithServices(_ serviceUUIDs: [CoreBluetooth.CBUUID]?)
+  @objc public func startScan(cbUUid: Swift.String?)
+  @objc public func stopScan()
+  @objc public func connectPeripheral(peripheral: InnoHubSDK.ZZPeripheral)
+  @objc public func managerDisconnectPeripheral()
+  @objc public func managerDiscoverServices(_ serviceUUIDs: [CoreBluetooth.CBUUID]?)
+  @objc public func managerDiscoverCharacteristics(_ characteristicUUIDs: [CoreBluetooth.CBUUID]?, for service: CoreBluetooth.CBService)
+  @objc public func managerWriteValue(_ data: Foundation.Data, for characteristic: CoreBluetooth.CBCharacteristic, type: CoreBluetooth.CBCharacteristicWriteType)
+  @objc public func managerSetNotifyValue(_ enabled: Swift.Bool, for characteristic: CoreBluetooth.CBCharacteristic)
+  @objc public func centralManagerDidUpdateState(_ central: CoreBluetooth.CBCentralManager)
+  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
+  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didConnect peripheral: CoreBluetooth.CBPeripheral)
+  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didFailToConnect peripheral: CoreBluetooth.CBPeripheral, error: (any Swift.Error)?)
+  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: (any Swift.Error)?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverServices error: (any Swift.Error)?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverCharacteristicsFor service: CoreBluetooth.CBService, error: (any Swift.Error)?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateNotificationStateFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateValueFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didWriteValueFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
+  @objc deinit
+}
+extension Swift.String {
+  public func getCharAdvance(index: Swift.Int) -> Swift.String
+  public func getFirstChar() -> Swift.String
+  public func getCharReverse(index: Swift.Int) -> Swift.String
+  public func getLastChar() -> Swift.String
+  public func getString(startIndex: Swift.Int, endIndex: Swift.Int) -> Swift.String
+  public func getString(startIndex: Swift.Int, count: Swift.Int) -> Swift.String
+  public func subStringFrom(startIndex: Swift.Int) -> Swift.String
+  public func subStringTo(endIndex: Swift.Int) -> Swift.String
+}
+extension Swift.String {
+  public func caclulateTextWidth(font: UIKit.UIFont, height: CoreFoundation.CGFloat) -> CoreFoundation.CGFloat
+  public func caclulateTextHeight(font: UIKit.UIFont, width: CoreFoundation.CGFloat) -> CoreFoundation.CGFloat
+}
+extension Swift.String {
+  public func trimmingAllWhiteSpaces() -> Swift.String
+  public func isEmptyString() -> Swift.Bool
+  public func encodeTelphone() -> Swift.String
+}
+@_inheritsConvenienceInitializers @objc(ZZPeripheral) public class ZZPeripheral : ObjectiveC.NSObject {
+  @objc public var peripheral: CoreBluetooth.CBPeripheral?
+  @objc public var advertisementData: [Swift.String : Any]?
+  @objc public var RSSI: Foundation.NSNumber?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(PublicAPI) public class PublicAPI : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc public func configureGlobalSettings(projectId: Swift.String, spaceId: Swift.String, token: Swift.String)
+  @objc public func pushViewController(deviceId: Swift.String, thirdRealId: Swift.String, productId: Swift.String, name: Swift.String, pictureUrlApp: Swift.String, model: Swift.String, detailUrl: Swift.String, lang: Swift.String, roomName: Swift.String, from viewController: UIKit.UIViewController)
+  @objc public func getDeviceList(completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func getProductTypeList(completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func getProductTypeDevie(type: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func getDeviceGuide(model: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func loginScan(productId: Swift.String, data: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func getAvailableDevice(productId: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func getSupportDevice(productId: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func startZigbeeJoin(productId: Swift.String, thirdRealId: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func stopZigbeeJoin(productId: Swift.String, thirdRealId: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func startPlcJoin(productId: Swift.String, thirdRealId: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func stopPlcJoin(productId: Swift.String, thirdRealId: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func pollingCheckDevice(model: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func synchronizingXiaomiDevices(completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func createMiSpace(completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func fetchCurrentWiFiSSID(model: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func getAccessToken(productId: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func fetchIgnoreCertificateSleep(ssid: Swift.String, passWord: Swift.String, completion: @escaping (Swift.Bool, Swift.String?) -> Swift.Void)
+  @objc public func fetchRouterCheckOemInformation(completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func getRandomNumberInterface(completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func routerLogin(random: Swift.String, passWord: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func scanNeighborsDevice(localHost: Swift.String, completion: @escaping ([Swift.String : Any]?) -> Swift.Void)
+  @objc public func getNasBindDeviceNameAndAddress(localHost: Swift.String, deviceId: Swift.String, completion: @escaping ([Swift.String : Any]?) -> Swift.Void)
+  @objc public func configureWirelessPassword(httpPass: Swift.String, ssid: Swift.String, passWord: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func bindingDoorLock(productId: Swift.String, macAddress: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func createNASVirtualAccount(completion: @escaping ([Swift.String : Any]?) -> Swift.Void)
+  @objc public func bindingNas(localHost: Swift.String, uuid: Swift.String, name: Swift.String, path: Swift.String, completion: @escaping ([Swift.String : Any]?) -> Swift.Void)
+  @objc public func checkNasStatus(localHost: Swift.String, deviceId: Swift.String, completion: @escaping ([Swift.String : Any]?) -> Swift.Void)
+  @objc public func getNasDeviceList(localHost: Swift.String, completion: @escaping ([Swift.String : Any]?) -> Swift.Void)
+  @objc public func scanCodeDeviceBind(code: Swift.String, model: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func scanLogin(code: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func getDeviceInfoBySN(snNo: Swift.String, completion: @escaping (Swift.Bool, [Swift.String : Any]?) -> Swift.Void)
+  @objc public func bindingLoginScan(productId: Swift.String, data: Swift.String, model: Swift.String, completion: @escaping ([Swift.String : Any]) -> Swift.Void)
+  @objc public func bindingBekryptonDevice(productId: Swift.String, data: Swift.String, model: Swift.String, completion: @escaping ([Swift.String : Any]) -> Swift.Void)
+  @objc public func bindingZigbeeJoinDevice(productId: Swift.String, thirdRealId: Swift.String, model: Swift.String, completion: @escaping ([Swift.String : Any]) -> Swift.Void)
+  @objc public func bindingPlcJoinDevice(productId: Swift.String, thirdRealId: Swift.String, model: Swift.String, completion: @escaping ([Swift.String : Any]) -> Swift.Void)
+  @objc deinit
+}
+extension UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency public func makeToast(_ message: Swift.String?, duration: Foundation.TimeInterval = ToastManager.shared.duration, position: InnoHubSDK.ToastPosition = ToastManager.shared.position, title: Swift.String? = nil, image: UIKit.UIImage? = nil, style: InnoHubSDK.ToastStyle = ToastManager.shared.style, completion: ((_ didTap: Swift.Bool) -> Swift.Void)? = nil)
+  @_Concurrency.MainActor @preconcurrency public func customMakeToast(_ message: Swift.String?, duration: Foundation.TimeInterval = ToastManager.shared.duration, position: InnoHubSDK.ToastPosition = ToastManager.shared.position, title: Swift.String? = nil, image: UIKit.UIImage? = nil, style: InnoHubSDK.ToastStyle = ToastManager.shared.style, completion: ((_ didTap: Swift.Bool) -> Swift.Void)? = nil)
+  @_Concurrency.MainActor @preconcurrency public func makeToast(_ message: Swift.String?, duration: Foundation.TimeInterval = ToastManager.shared.duration, point: CoreFoundation.CGPoint, title: Swift.String?, image: UIKit.UIImage?, style: InnoHubSDK.ToastStyle = ToastManager.shared.style, completion: ((_ didTap: Swift.Bool) -> Swift.Void)?)
+  @_Concurrency.MainActor @preconcurrency public func showToast(_ toast: UIKit.UIView, duration: Foundation.TimeInterval = ToastManager.shared.duration, position: InnoHubSDK.ToastPosition = ToastManager.shared.position, completion: ((_ didTap: Swift.Bool) -> Swift.Void)? = nil)
+  @_Concurrency.MainActor @preconcurrency public func showToast(_ toast: UIKit.UIView, duration: Foundation.TimeInterval = ToastManager.shared.duration, point: CoreFoundation.CGPoint, completion: ((_ didTap: Swift.Bool) -> Swift.Void)? = nil)
+  @_Concurrency.MainActor @preconcurrency public func hideToast()
+  @_Concurrency.MainActor @preconcurrency public func hideToast(_ toast: UIKit.UIView)
+  @_Concurrency.MainActor @preconcurrency public func hideAllToasts(includeActivity: Swift.Bool = false, clearQueue: Swift.Bool = true)
+  @_Concurrency.MainActor @preconcurrency public func clearToastQueue()
+  @_Concurrency.MainActor @preconcurrency public func makeToastActivity(_ position: InnoHubSDK.ToastPosition)
+  @_Concurrency.MainActor @preconcurrency public func customMakeToastActivity(_ position: InnoHubSDK.ToastPosition)
+  @_Concurrency.MainActor @preconcurrency public func makeOldToastActivity(_ position: InnoHubSDK.ToastPosition)
+  @_Concurrency.MainActor @preconcurrency public func makeToastActivity(_ point: CoreFoundation.CGPoint)
+  @_Concurrency.MainActor @preconcurrency public func hideToastActivity()
+  @_Concurrency.MainActor @preconcurrency public func isShowingToast() -> Swift.Bool
+  @_Concurrency.MainActor @preconcurrency public func toastViewForMessage(_ message: Swift.String?, title: Swift.String?, image: UIKit.UIImage?, style: InnoHubSDK.ToastStyle) throws -> UIKit.UIView
+}
+public struct ToastStyle {
+  public init()
+  public var backgroundColor: UIKit.UIColor
+  public var titleColor: UIKit.UIColor
+  public var messageColor: UIKit.UIColor
+  public var maxWidthPercentage: CoreFoundation.CGFloat {
+    get
+    set
+  }
+  public var maxHeightPercentage: CoreFoundation.CGFloat {
+    get
+    set
+  }
+  public var horizontalPadding: CoreFoundation.CGFloat
+  public var verticalPadding: CoreFoundation.CGFloat
+  public var cornerRadius: CoreFoundation.CGFloat
+  public var titleFont: UIKit.UIFont
+  public var messageFont: UIKit.UIFont
+  public var titleAlignment: UIKit.NSTextAlignment
+  public var messageAlignment: UIKit.NSTextAlignment
+  public var titleNumberOfLines: Swift.Int
+  public var messageNumberOfLines: Swift.Int
+  public var displayShadow: Swift.Bool
+  public var shadowColor: UIKit.UIColor
+  public var shadowOpacity: Swift.Float {
+    get
+    set
+  }
+  public var shadowRadius: CoreFoundation.CGFloat
+  public var shadowOffset: CoreFoundation.CGSize
+  public var imageSize: CoreFoundation.CGSize
+  public var activitySize: CoreFoundation.CGSize
+  public var fadeDuration: Swift.Double
+  public var activityIndicatorColor: UIKit.UIColor
+  public var activityBackgroundColor: UIKit.UIColor
+}
+@_hasMissingDesignatedInitializers public class ToastManager {
+  public static let shared: InnoHubSDK.ToastManager
+  public var style: InnoHubSDK.ToastStyle
+  public var isTapToDismissEnabled: Swift.Bool
+  public var isQueueEnabled: Swift.Bool
+  public var duration: Swift.Double
+  public var position: InnoHubSDK.ToastPosition
+  @objc deinit
+}
+public enum ToastPosition {
+  case top
+  case center
+  case bottom
+  public static func == (a: InnoHubSDK.ToastPosition, b: InnoHubSDK.ToastPosition) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public func textWidth(text: Swift.String, font: UIKit.UIFont) -> CoreFoundation.CGFloat
+extension InnoHubSDK.AuthenticationFailure : Swift.Equatable {}
+extension InnoHubSDK.AuthenticationFailure : Swift.Hashable {}
+extension InnoHubSDK.ESPNetworkType : Swift.Equatable {}
+extension InnoHubSDK.ESPNetworkType : Swift.Hashable {}
+extension InnoHubSDK.ESPNetworkType : Swift.RawRepresentable {}
+extension InnoHubSDK.ESPTransport : Swift.Equatable {}
+extension InnoHubSDK.ESPTransport : Swift.Hashable {}
+extension InnoHubSDK.ESPTransport : Swift.RawRepresentable {}
+extension InnoHubSDK.ESPSecurity : Swift.Equatable {}
+extension InnoHubSDK.ESPSecurity : Swift.Hashable {}
+extension InnoHubSDK.ESPSecurity : Swift.RawRepresentable {}
+extension InnoHubSDK.ToastPosition : Swift.Equatable {}
+extension InnoHubSDK.ToastPosition : Swift.Hashable {}
